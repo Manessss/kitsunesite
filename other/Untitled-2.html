@@ -16,7 +16,7 @@
     <button type="button" autofocus onclick="addProduct(this)">Production</button>
     <h2 id="Customer" class = "numbers"> CUSTOMERS : 0</h2>
     <button type="button" autofocus onclick="addCustomer(this)">Customer</button> 
-    <h3 id="Price"> PRICE OF PRODUCT : 1</h3> 
+    <h3 id="Price"> PRICE OF PRODUCT : 0.5</h3> 
     <button type="button" autofocus onclick="RaisePrice(this)">Raise</button> 
     <button type="button" autofocus onclick="LowerPrice(this)">Lower</button> 
     <h2 id="debug" class = "numbers"> 0 </h2>
@@ -28,18 +28,19 @@
     // Money making
     var MoneyTotal = 0;
     var MoneyCurrent = 0;
-    var MoneyPerProduct = 1;
+    var MoneyPerProduct = 0.5;
     var ProductSoldPerCustomer = 1;
+    var PriceIncrementation = 0.01;
 
     // Product making
     var ProductTotal = 0;
-    var ProductCurrent = 0
+    var ProductCurrent = 100000
     var ProductPerClick = 1;
 
     
     // Customer making
     var CustomerTotal = 0;
-    var CustomerCurrent = 0
+    var CustomerCurrent = 100000
     var CustomerPerClick = 1;
 
     var Multi = 1;
@@ -47,12 +48,12 @@
 
     // Interface Functions
     function addMoney() {
-        MoneyTotal,MoneyCurrent += MoneyPerProduct * ProductSoldPerCustomer;
+        MoneyTotal,MoneyCurrent += RoundToCent(MoneyPerProduct * ProductSoldPerCustomer);
         updateMoney();
     }
 
     function addProduct() {
-        ProductTotal,ProductCurrent += ProductPerClick;
+        ProductTotal,ProductCurrent += Math.round(ProductPerClick);
         updateProduct();
     }
     
@@ -62,7 +63,7 @@
     }
 
     function updateMoney() {
-        document.getElementById("Money").innerHTML = "MONEY : " + MoneyCurrent;
+        document.getElementById("Money").innerHTML = "MONEY : " + RoundToCent(MoneyCurrent);
     }
 
     function updateProduct() {
@@ -74,22 +75,25 @@
     }
     
     function updatePriceOfProduct() {
+
+        
         document.getElementById("Price").innerHTML = "PRICE OF PRODUCT : " + MoneyPerProduct;
     }
 
     // BTS Functions
     function SoldPerSecond() {
-        return Math.round(0.6 * MoneyPerProduct * Multi);
+
+        return Math.round(0.6 * ProductSoldPerCustomer * Multi);
     }
 
     function RaisePrice() {
-        MoneyPerProduct = (Math.round(MoneyPerProduct*10) + 1) / 10
+        MoneyPerProduct = RoundToCent(MoneyPerProduct + PriceIncrementation);
         updatePriceOfProduct();
     }
 
     function LowerPrice() {
-        if (MoneyPerProduct > 0.1) {
-            MoneyPerProduct = (Math.round(MoneyPerProduct*10) - 1) / 10
+        if (MoneyPerProduct > 0.01) {
+            MoneyPerProduct = RoundToCent(MoneyPerProduct - PriceIncrementation);
             updatePriceOfProduct();
         }
     }
@@ -106,8 +110,12 @@
         
         updateCustomer();
         updateProduct();
+        document.getElementById("debug").innerHTML = Math.round(1000 / (0.5 / getMoneyPerProduct()));
         
-        
+    }
+
+    function RoundToCent(nmbr) {
+        return (Math.round(nmbr * 100) / 100);
     }
         
     // Verification Functions
@@ -125,13 +133,18 @@
 
     function buyProduction(type) {
         
-        document.getElementById("debug").innerHTML = productionTypeList[0];
+        
     }
 
+    function getMoneyPerProduct(){
+        return MoneyPerProduct;
+    }
 
     buyProduction("type");
     i = 0;
-    setInterval(SellProduct,1000);
+    setInterval(SellProduct,Math.round(1000 / (0.5 / getMoneyPerProduct())));
+    clearInterval();
+
 
 
 </script>
