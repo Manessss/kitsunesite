@@ -15,7 +15,10 @@
     <h2 id="Product" class = "numbers"> PRODUCT : 0</h2>
     <button type="button" autofocus onclick="addProduct(this)">Production</button>
     <h2 id="Customer" class = "numbers"> CUSTOMERS : 0</h2>
-    <button type="button" autofocus onclick="addCustomer(this)">Customer</button>  
+    <button type="button" autofocus onclick="addCustomer(this)">Customer</button> 
+    <h3 id="Price"> PRICE OF PRODUCT : 1</h3> 
+    <button type="button" autofocus onclick="RaisePrice(this)">Raise</button> 
+    <button type="button" autofocus onclick="LowerPrice(this)">Lower</button> 
     <h2 id="debug" class = "numbers"> 0 </h2>
 
 </body>
@@ -41,9 +44,10 @@
 
     var Multi = 1;
 
+
     // Interface Functions
     function addMoney() {
-        MoneyTotal,MoneyCurrent += MoneyPerProduct;
+        MoneyTotal,MoneyCurrent += MoneyPerProduct * ProductSoldPerCustomer;
         updateMoney();
     }
 
@@ -68,25 +72,41 @@
     function updateCustomer() {
         document.getElementById("Customer").innerHTML = "CUSTOMERS : " + CustomerCurrent;
     }
+    
+    function updatePriceOfProduct() {
+        document.getElementById("Price").innerHTML = "PRICE OF PRODUCT : " + MoneyPerProduct;
+    }
 
     // BTS Functions
-    function CustomerPerSecond() {
-        return Math.round(0.6 * Multi);
+    function SoldPerSecond() {
+        return Math.round(0.6 * MoneyPerProduct * Multi);
+    }
+
+    function RaisePrice() {
+        MoneyPerProduct = (Math.round(MoneyPerProduct*10) + 1) / 10
+        updatePriceOfProduct();
+    }
+
+    function LowerPrice() {
+        if (MoneyPerProduct > 0.1) {
+            MoneyPerProduct = (Math.round(MoneyPerProduct*10) - 1) / 10
+            updatePriceOfProduct();
+        }
     }
 
     function SellProduct() {
 
         i++;
         if (EnoughProductOrCustomer()) {
-            CustomerCurrent -= CustomerPerSecond(); // sold per second for now CHANGE LATER!!
-            ProductCurrent  -= CustomerPerSecond();
+            CustomerCurrent -= Math.round(SoldPerSecond() * ProductSoldPerCustomer); // sold per second for now CHANGE LATER!!
+            ProductCurrent  -= Math.round(SoldPerSecond());
             addMoney();
             
         }
         
         updateCustomer();
         updateProduct();
-        document.getElementById("debug").innerHTML = i;
+        
         
     }
         
@@ -94,7 +114,22 @@
     function EnoughProductOrCustomer() {
             return (CustomerCurrent >= 1) && (ProductCurrent >= 1);
     }
-    
+
+    // AUTO PRODUCTION
+    var productionTypeList = [
+        "Friend",                       //  0
+        "Minimum Wage Employee",        //  1
+        "Contractor",                   //  2
+        "Product Expert"                //  3
+    ];
+
+    function buyProduction(type) {
+        
+        document.getElementById("debug").innerHTML = productionTypeList[0];
+    }
+
+
+    buyProduction("type");
     i = 0;
     setInterval(SellProduct,1000);
 
