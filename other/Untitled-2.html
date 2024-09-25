@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+    .h2 {
+        position: relative;
+        text-size-adjust: 30px;
+        left: 30px;
+    }
+</style>
+
+<body>
+
+    <h1 id="Money"> MONEY : 0</h1>
+    <h2 id="Product" class = "numbers"> PRODUCT : 0</h2>
+    <button type="button" autofocus onclick="addProduct(this)">Production</button>
+    <h2 id="Customer" class = "numbers"> CUSTOMERS : 0</h2>
+    <button type="button" autofocus onclick="addCustomer(this)">Customer</button>  
+    <h2 id="debug" class = "numbers"> 0 </h2>
+
+</body>
+
+
+<script>
+    // Money making
+    var MoneyTotal = 0;
+    var MoneyCurrent = 0;
+    var MoneyPerProduct = 1;
+    var ProductSoldPerCustomer = 1;
+
+    // Product making
+    var ProductTotal = 0;
+    var ProductCurrent = 0
+    var ProductPerClick = 1;
+
+    
+    // Customer making
+    var CustomerTotal = 0;
+    var CustomerCurrent = 0
+    var CustomerPerClick = 1;
+
+    var Multi = 1;
+
+    // Interface Functions
+    function addMoney() {
+        MoneyTotal,MoneyCurrent += MoneyPerProduct;
+        updateMoney();
+    }
+
+    function addProduct() {
+        ProductTotal,ProductCurrent += ProductPerClick;
+        updateProduct();
+    }
+    
+    function addCustomer() {
+        CustomerTotal,CustomerCurrent += CustomerPerClick;
+        updateCustomer();    
+    }
+
+    function updateMoney() {
+        document.getElementById("Money").innerHTML = "MONEY : " + MoneyCurrent;
+    }
+
+    function updateProduct() {
+        document.getElementById("Product").innerHTML = "PRODUCT : " + ProductCurrent;
+    }
+
+    function updateCustomer() {
+        document.getElementById("Customer").innerHTML = "CUSTOMERS : " + CustomerCurrent;
+    }
+
+    // BTS Functions
+    function CustomerPerSecond() {
+        return Math.round(0.6 * Multi);
+    }
+
+    function SellProduct() {
+
+        i++;
+        if (EnoughProductOrCustomer()) {
+            CustomerCurrent -= CustomerPerSecond(); // sold per second for now CHANGE LATER!!
+            ProductCurrent  -= CustomerPerSecond();
+            addMoney();
+            
+        }
+        
+        updateCustomer();
+        updateProduct();
+        document.getElementById("debug").innerHTML = i;
+        
+    }
+        
+    // Verification Functions
+    function EnoughProductOrCustomer() {
+            return (CustomerCurrent >= 1) && (ProductCurrent >= 1);
+    }
+    
+    i = 0;
+    setInterval(SellProduct,1000);
+
+
+</script>
+
+</html>
