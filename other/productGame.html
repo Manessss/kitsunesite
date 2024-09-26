@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+    .h2 {
+        position: relative;
+        text-size-adjust: 30px;
+        left: 30px;
+    }
+</style>
+
+<body>
+
+    <h1 id="Money"> MONEY : 0</h1>
+    <h2 id="Product" class = "numbers"> PRODUCT : 0</h2>
+    <button type="button" autofocus onclick="addProduct(this)">Production</button>
+    <h2 id="Customer" class = "numbers"> CUSTOMERS : 0</h2>
+    <button type="button" autofocus onclick="addCustomer(this)">Customer</button> 
+    <h3 id="Price"> PRICE OF PRODUCT : 1</h3> 
+    <button type="button" autofocus onclick="RaisePrice(this)">Raise</button> 
+    <button type="button" autofocus onclick="LowerPrice(this)">Lower</button> 
+    <h2 id="debug" class = "numbers"> 0 </h2>
+
+</body>
+
+
+<script>
+    // Money making
+    var MoneyTotal = 0;
+    var MoneyCurrent = 0;
+    var MoneyPerProduct = 1;
+    var ProductSoldPerCustomer = 1;
+
+    // Product making
+    var ProductTotal = 0;
+    var ProductCurrent = 0
+    var ProductPerClick = 1;
+
+    
+    // Customer making
+    var CustomerTotal = 0;
+    var CustomerCurrent = 0
+    var CustomerPerClick = 1;
+
+    var Multi = 1;
+
+    // AUTO PRODUCTION
+    var productionTypeList = [
+        "Friend",                       //  0
+        "Minimum Wage Employee",        //  1
+        "Contractor",                   //  2
+        "Product Expert"                //  3
+    ];
+
+
+    // Interface Functions
+    function addMoney() {
+        MoneyTotal,MoneyCurrent += MoneyPerProduct * ProductSoldPerCustomer / 10;
+        updateMoney();
+    }
+
+    function addProduct() {
+        ProductTotal,ProductCurrent += ProductPerClick;
+        updateProduct();
+    }
+    
+    function addCustomer() {
+        CustomerTotal,CustomerCurrent += CustomerPerClick;
+        updateCustomer();    
+    }
+
+    function updateMoney() {
+        document.getElementById("Money").innerHTML = "MONEY : " + toCent(MoneyCurrent);
+    }
+
+    function updateProduct() {
+        document.getElementById("Product").innerHTML = "PRODUCT : " + Math.round(ProductCurrent);
+    }
+
+    function updateCustomer() {
+        document.getElementById("Customer").innerHTML = "CUSTOMERS : " + Math.round(CustomerCurrent);
+    }
+    
+    function updatePriceOfProduct() {
+        document.getElementById("Price").innerHTML = "PRICE OF PRODUCT : " + MoneyPerProduct;
+    }
+
+    // UI Functions
+
+    function RaisePrice() {
+        MoneyPerProduct += 1
+        updatePriceOfProduct();
+    }
+
+    function LowerPrice() {
+        if (MoneyPerProduct > 1) {
+            MoneyPerProduct -= MoneyPerProduct - 1
+            updatePriceOfProduct();
+        }
+    }
+        
+    // Verification Functions
+    function EnoughProductOrCustomer() {
+            return (CustomerCurrent >= 1) && (ProductCurrent >= 1);
+    }
+
+    function buyProduction(type) {
+        document.getElementById("debug").innerHTML = productionTypeList[0];
+    }
+
+    function toCent(number) {
+        return Math.round(number * 100) / 100
+    }
+    
+    function calculateMoneyPS() {
+        if (EnoughProductOrCustomer()) {
+            CustomerCurrent -= 0.1 // modify later
+            ProductCurrent -= 0.1
+            addMoney()
+            updateMoney()
+            updateCustomer()
+            updateProduct()
+        }
+    }
+
+    function gameTickHandler() {
+        calculateMoneyPS()
+    }
+
+
+    setInterval(gameTickHandler,100);
+
+
+</script>
+
+</html>
