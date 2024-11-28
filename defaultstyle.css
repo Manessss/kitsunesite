@@ -1,0 +1,44 @@
+body 
+{
+    background-color: rgb(0, 0, 0);
+}
+    
+h1 
+{
+    color: rgb(211, 181, 85);
+    text-align: left;
+}
+    
+p 
+{
+    font-family: verdana;
+    font-size: 20px;
+}
+
+.left {
+    
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 50%;
+    background-color: white;
+}
+
+.right {
+    
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 50%;
+    background-color: white;
+}
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
